@@ -27,8 +27,8 @@ public class MedicalController {
     @GetMapping
     public ResponseEntity<ApiResponse> getAllMedicalItems() {
         List<MedicalItem> medicalItems = medicalService.getAllMedicalItems();
-//        List<MedicalDto> medicalDto = medicalService.getConvertedMedicalItems(medicalItems);
-        return ResponseEntity.ok(new ApiResponse("success", medicalItems));
+        List<MedicalDto> medicalDto = medicalService.getConvertedMedicalItems(medicalItems);
+        return ResponseEntity.ok(new ApiResponse("success", medicalDto));
     }
 
     @GetMapping("/{id}")

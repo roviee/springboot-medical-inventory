@@ -134,9 +134,14 @@ public class MedicalImpl implements MedicalService {
         medicalDto.setUnitPrice(medicalItems.getUnitPrice());
         medicalDto.setCategory(medicalItems.getCategory());
 
-        SupplierDTO supplierDTO = new SupplierDTO();
-        supplierDTO.setName(medicalItems.getSupplier().getName());
-        medicalDto.setSupplier(supplierDTO);
+        Supplier supplier = medicalItems.getSupplier();
+        if (supplier != null) {
+            SupplierDTO supplierDTO = new SupplierDTO();
+            supplierDTO.setName(supplier.getName());
+            medicalDto.setSupplier(supplierDTO);
+        } else {
+            medicalDto.setSupplier(null);
+        }
 
         List<Inventory> inventories = inventoryRepository.findByMedicalItemId(medicalItems.getId());
         List<InventoryDto> inventoryDtos = inventories.stream()
