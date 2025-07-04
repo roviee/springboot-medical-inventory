@@ -15,11 +15,17 @@ import com.example.medInventory.repository.MedicalRepository;
 import com.example.medInventory.repository.SupplierRepository;
 import com.example.medInventory.request.AddMedicalItemRequest;
 import com.example.medInventory.request.MedicalItemUpdateRequest;
+import com.example.medInventory.response.MedicalItemResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -116,6 +122,34 @@ public class MedicalImpl implements MedicalService {
                 .ifPresentOrElse(medicalRepository::delete, () -> {
             throw new ResourceNotFoundException("Category not found");
         });
+    }
+
+    @Override
+    public MedicalItemResponse getAllMedicalItemPagination(Integer pageNumber, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<MedicalItem> medicalItemPages = medicalRepository.findAll(pageable);
+
+        List<MedicalDto> medicalDtos = getConvertedMedicalItems(medicalItemPages.getContent());
+
+        return new MedicalItemResponse(medicalDtos, pageNumber, pageSize,
+                medicalItemPages.getTotalElements(),
+                medicalItemPages.getTotalPages(),
+                medicalItemPages.isLast());
+    }
+
+    @Override
+    public MedicalItemResponse getAllMedicalItemWithPaginationAndSorting(Integer pageNumber, Integer pageSize,
+                                                                         String sortBy, String dir) {
+        Sort sort = dir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
+        Page<MedicalItem> medicalItemPages = medicalRepository.findAll(pageable);
+        List<MedicalDto> medicalDtos = getConvertedMedicalItems(medicalItemPages.getContent());
+
+        return new MedicalItemResponse(medicalDtos, pageNumber, pageSize,
+                medicalItemPages.getTotalElements(),
+                medicalItemPages.getTotalPages(),
+                medicalItemPages.isLast());
     }
 
     @Override

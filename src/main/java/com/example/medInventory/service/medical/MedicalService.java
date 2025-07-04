@@ -4,6 +4,7 @@ import com.example.medInventory.dto.MedicalDto;
 import com.example.medInventory.model.MedicalItem;
 import com.example.medInventory.request.AddMedicalItemRequest;
 import com.example.medInventory.request.MedicalItemUpdateRequest;
+import com.example.medInventory.response.MedicalItemResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,4 +20,8 @@ public interface MedicalService {
 
     List<MedicalDto> getConvertedMedicalItems(List<MedicalItem> medicalItems);
     MedicalDto convertToDto(MedicalItem medicalItem);
+
+    MedicalItemResponse getAllMedicalItemPagination(Integer pageNumber, Integer pageSize);
+    MedicalItemResponse getAllMedicalItemWithPaginationAndSorting(Integer pageNumber, Integer pageSize,
+                                                                  String sortBy, String dir);
 }

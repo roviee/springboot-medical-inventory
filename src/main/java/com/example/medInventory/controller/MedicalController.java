@@ -7,7 +7,9 @@ import com.example.medInventory.model.MedicalItem;
 import com.example.medInventory.request.AddMedicalItemRequest;
 import com.example.medInventory.request.MedicalItemUpdateRequest;
 import com.example.medInventory.response.ApiResponse;
+import com.example.medInventory.response.MedicalItemResponse;
 import com.example.medInventory.service.medical.MedicalService;
+import com.example.medInventory.utils.AppConstants;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +59,26 @@ public class MedicalController {
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("error", e.getMessage()));
         }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse> getMedicalItemWithPagination(
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize
+    ) {
+            MedicalItemResponse medicalItemResponse = medicalService.getAllMedicalItemPagination(pageNumber, pageSize);
+            return ResponseEntity.ok(new ApiResponse("success", medicalItemResponse));
+    }
+    @GetMapping("/allPageSort")
+    public ResponseEntity<ApiResponse> getMedicalItemWithPaginationAndSorting(
+            @RequestParam(defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
+            @RequestParam(defaultValue = AppConstants.SORT_DIR, required = false) String dir
+
+    ) {
+        MedicalItemResponse medicalItemResponse = medicalService.getAllMedicalItemWithPaginationAndSorting(pageNumber, pageSize, sortBy, dir);
+        return ResponseEntity.ok(new ApiResponse("success", medicalItemResponse));
     }
 
     @PostMapping
