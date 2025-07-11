@@ -46,7 +46,9 @@ A backend system for managing medical items, categories, inventory, and supplier
 {
   "name": "Paracetamol",
   "description": "Pain reliever",
-  "quantity": 100,
+  "expiryDate": "2025-12-31",
+  "batchNumber": "ABC123",
+  "unitPrice": 12.50,
   "category": {
     "name": "Painkillers"
   },
@@ -57,7 +59,6 @@ A backend system for managing medical items, categories, inventory, and supplier
   },
   "inventory": {
     "location": "Main Storage A",
-    "quantity": 100,
-    "expiryDate": "2025-12-31"
+    "quantity": 100
   }
 }
