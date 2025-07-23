@@ -12,7 +12,7 @@ A backend system for managing medical items, categories, inventory, and supplier
 - 🧪 Tested via Postman
 - 🌱 DTO Usage for clean request/response objects
 - 📚 Pagination & Sorting
-- 🔐 JWT Authentication (Upcoming)
+- 🔐 JWT Authentication
 - 🔁 Forgot & Reset Password (Upcoming)
 
 ---
