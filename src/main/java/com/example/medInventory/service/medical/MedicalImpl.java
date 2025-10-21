@@ -52,20 +52,14 @@ public class MedicalImpl implements MedicalService {
 
     @Override
     public MedicalItem createMedicalItem(AddMedicalItemRequest request) {
-        Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
-                .orElseGet(() -> {
-                    Category newCategory = new Category(request.getCategory().getName());
-                    return categoryRepository.save(newCategory);
-                });
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new ItemsNotFoundException("Category not found"));
 
-        Supplier supplier = Optional.ofNullable(supplierRepository.findByName(request.getSupplier().getName()))
-                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found: " + request.getSupplier().getName()));
+        Supplier supplier = supplierRepository.findById(request.getSupplierId())
+                .orElseThrow(() -> new ItemsNotFoundException("Supplier not found"));
 
-
-        request.setCategory(category);
-        request.setSupplier(supplier);
-        MedicalItem newItem = addMedicalItem(request, category, supplier);
-        return medicalRepository.save(newItem);
+        MedicalItem item = addMedicalItem(request, category, supplier);
+        return medicalRepository.save(item);
     }
 
     private MedicalItem addMedicalItem(AddMedicalItemRequest request, Category category, Supplier supplier) {
@@ -171,6 +165,7 @@ public class MedicalImpl implements MedicalService {
         Supplier supplier = medicalItems.getSupplier();
         if (supplier != null) {
             SupplierDTO supplierDTO = new SupplierDTO();
+            supplierDTO.setId(supplier.getId());
             supplierDTO.setName(supplier.getName());
             medicalDto.setSupplier(supplierDTO);
         } else {

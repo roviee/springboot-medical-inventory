@@ -1,7 +1,5 @@
 package com.example.medInventory.request;
 
-import com.example.medInventory.model.Category;
-import com.example.medInventory.model.Supplier;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -15,6 +13,6 @@ public class AddMedicalItemRequest {
     private LocalDate expiryDate;
     private String batchNumber;
     private BigDecimal unitPrice;
-    private Category category;
-    private Supplier supplier;
+    private Long categoryId;
+    private Long supplierId;
 }
